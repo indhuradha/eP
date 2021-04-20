@@ -58,8 +58,12 @@ async function ForkIndexTerm(payLoad) {
         let current_time = moment().format('YYYY-MM-DD, hh:mm:ss a');
 
         if (fs.existsSync(dataFolderPath.dataFolder_book)) {
+            var vdbtype = 'chapter';
+            if(payLoad.stage == 650){
+                vdbtype = 'bks';
+            }
             // open a database connection
-            const Generate_Token = { dbtype: payLoad.dbtype, 'tk': { token: payLoad.token } };
+            const Generate_Token = { dbtype: vdbtype, 'tk': { token: payLoad.token } };
             const db = preprocessor.preProcessSentToToken(Generate_Token);
             var indextermtype = payLoad.indextermtype;
             var signalWriteFilePath = dataFolderPath.dataFolderPath + 'log.txt';
