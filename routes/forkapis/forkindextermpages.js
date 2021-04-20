@@ -207,7 +207,7 @@ async function ForkIndexTerm(payLoad) {
                                                 chaper_num_text += `<a href="${url_port_details.Interfacelink_bks}${Create_new_token[row.chapterid]}/#IndexTerm${row.id}" class=${chapter_id_class[row.status]}>${'#'} ${row.chapterid}</a>` + '  ';
                                             } else {
 
-                                                chaper_num_text += `<a href="${url_port_details.Interfacelink_bks}${row.token}/#IndexTerm${row.id}" class=${chapter_id_class[row.status]}>${'#'} ${row.chapterid}</a>` + '  ';
+                                                chaper_num_text += `<a href="${url_port_details.Interfacelink_bks}${payLoad.token}/#IndexTerm${row.id}" class=${chapter_id_class[row.status]}>${'#'} ${row.chapterid}</a>` + '  ';
                                             }
                                             //  var new_T_index_Term = { 'bks_no': payLoad.bks_no, 'chap_no': row.chapterid, 'stage': payLoad.stage, 'type': payLoad.type, 'mail_id': payLoad.mail_id };
                                             if (row.seeterm) {
@@ -253,7 +253,13 @@ async function ForkIndexTerm(payLoad) {
                                     var see_also_text = "";
                                     if (db_query && db_query.length) {
                                         db_query.map((row, i) => {
-                                            chaper_num_text += `<a href='#' class='navindex' token=${row.token} id=${row.id}>${'#'} ${row.chapterid}</a>` + '  ';
+                                            if (payLoad.stage == 650) {
+
+                                                chaper_num_text += `<a href='#' class='navindex' token=${Create_new_token[row.chapterid]} id=${row.id}>${'#'} ${row.chapterid}</a>` + '  ';
+                                            } else {
+                                                chaper_num_text += `<a href='#' class='navindex' token=${payLoad.token} id=${row.id}>${'#'} ${row.chapterid}</a>` + '  ';
+                                            }
+                                            //chaper_num_text += `<a href='#' class='navindex' token=${payLoad.token} id=${row.id}>${'#'} ${row.chapterid}</a>` + '  ';
                                             if (row.seeterm) {
                                                 see_text += `<span class=${see}>${row.seeterm}</span>, `;
                                             }
@@ -300,6 +306,7 @@ async function ForkIndexTerm(payLoad) {
         }
     }
     catch (error) {
+        console.log(error)
         process.send({ counter: { status: 400, msg: error.toString() } });
         process.exit();
     }
