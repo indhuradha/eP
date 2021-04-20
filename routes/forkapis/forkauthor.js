@@ -168,6 +168,9 @@ async function processToXml(content, payLoad) {
 
 async function JsonToXml(content) {
     return new Promise(function (resolve, reject) {
+        if (content.author.authorname[0].nogivenname) {
+            content.author.authorname[0].nogivenname = [{ '#': ' ' }];
+        }
         var xml = js2xmlparser.parse('sample', content, { useSelfClosingTagIfEmpty: false, format: { doubleQuotes: true, pretty: true }, declaration: { include: false } });
         /*NPM js2xmlparser to convert jsontoxml*/
         /*convert the xml to dom structure*/
@@ -185,9 +188,9 @@ async function Forkaq(payLoad) {
 
         if (payLoad.method == 'xmltojson') {
             /*Input XML content*/
-            var data = payLoad.content.replace(/nogivenname/g, 'givenname');
             /*Function to convert input XML to JSON*/
-            let resfromfun = fun.affiAuthorxmltojson(payLoad.method, url_port_details.node_env, data, response);
+            let resfromfun = fun.affiAuthorxmltojson(payLoad.method, url_port_details.node_env, payLoad.content, response);
+
 
             process.send({ counter: { status: 200, msg: resfromfun } });
             process.exit();
