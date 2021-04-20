@@ -116,9 +116,6 @@ async function UpdateForCorrectTable(vloop, db, authorsubchild, payLoad, dataFol
 
 async function JsonToXml(content) {
     return new Promise(function (resolve, reject) {
-        if (content.affiliation.authorname[0].nogivenname) {
-            content.affiliation.authorname[0].nogivenname = [{ '#': ' ' }];
-        }
         var xml = js2xmlparser.parse('sample', content, { useSelfClosingTagIfEmpty: false, format: { doubleQuotes: true, pretty: true }, declaration: { include: false } });
         /*NPM js2xmlparser to convert jsontoxml*/
         /*convert the xml to dom structure*/
@@ -248,7 +245,8 @@ async function Forkaffiliation(payLoad) {
         if (payLoad.method == 'xmltojson') {
             /*Input XML content*/
             /*Function to convert input XML to JSON*/
-            let resfromfun = fun.affiAuthorxmltojson(payLoad.method, url_port_details.node_env, payLoad.content);
+            var data = payLoad.content.replace(/nogivenname/g, 'givenname');
+            let resfromfun = fun.affiAuthorxmltojson(payLoad.method, url_port_details.node_env,data );
 
             process.send({ counter: { status: 200, msg: resfromfun } });
             process.exit();
