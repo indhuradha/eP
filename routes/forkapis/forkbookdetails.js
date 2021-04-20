@@ -161,10 +161,15 @@ async function reproof(input, Generate_Token) {
                     chaper_num = (input.chap_no).split('_')[0];
                 }
                 var Auth_Edit = false;
-                if (input.stage == 300) {
-                    var sql_b = "select * from book group by vendorname";
+                var sql_b = '';
+                if (input.auth_edit) {
+                     sql_b = `${"SELECT * FROM book where authorsequence='1'"}`;
                 } else {
-                    var sql_b = "SELECT * FROM book where authormailid='" + input.mail_id + "'";
+                    if (input.stage == 300) {
+                         sql_b = "select * from book group by vendorname";
+                    } else {
+                         sql_b = "SELECT * FROM book where authormailid='" + input.mail_id + "'";
+                    }
                 }
                 var bks_opt = await BookPageData(sql_b, bks_bk_db);
                 bks_bk_db.close();
@@ -187,14 +192,14 @@ async function reproof(input, Generate_Token) {
 
                         }
                     } else {
-                        if (input.auth_edit) {
-                            Auth_Edit = true;
-                            var sqlGetChapterList = `${"SELECT DISTINCT idtype,displaynum,chaptertitle, token,authorsequence FROM chapter where authorsequence='1'"}`;
-                        } else {
+                       if (input.auth_edit) {
+                           Auth_Edit = true;
+                           var sqlGetChapterList = `${"SELECT DISTINCT idtype,displaynum,chaptertitle, token,authorsequence FROM chapter where authorsequence='1'"}`;
+                       } else {
                             var sqlGetChapterList = "SELECT * FROM chapter where authormailid='" + input.mail_id + "'";
                             await ChapterStatusCount(input, bks_opt, bks_chap_db);
 
-                        }
+                       }
 
                     }
                     bks_chap_db.close();
